@@ -1,0 +1,6 @@
+@Civitta.TechnicalTask.PublicHolidays_HostAddress = http://localhost:5271
+
+GET {{Civitta.TechnicalTask.PublicHolidays_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
