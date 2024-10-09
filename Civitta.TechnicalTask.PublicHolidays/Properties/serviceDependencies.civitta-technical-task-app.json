@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.App/containerapps/civitta-technical-task-app/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsCivitta.TechnicalTask.P_40FFE63835",
+      "secretStore": "AzureContainerApp",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/civitta-technicaltask-publicholidays-dbserver/databases/Civitta.TechnicalTask.PublicHolidays_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:Civitta.TechnicalTask.PublicHolidays.Cloud",
+      "dynamicId": null
+    }
+  }
+}
