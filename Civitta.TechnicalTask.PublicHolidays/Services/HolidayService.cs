@@ -18,18 +18,18 @@ namespace Civitta.TechnicalTask.PublicHolidays.Services {
                 var webData = GetHolidaysByMonthWebAsync(month, year, country, region, holidayType).Result;
                 if (webData == null) return holidays;
                 foreach (var holidayDTO in webData) {
-                    List<int> nameKeys = []; int key = 0;
+                    IList<HolidayName> names = [];
                     foreach (var value in holidayDTO.Names) {
-                        nameKeys.Add(key++);
                         HolidayName name = new() {
                             Lang = value.Lang,
                             Text = value.Text
                         };
+                        names.Add(name);
                         _context.HolidayNames.Add(name);
                     }
                     Holiday holiday = new() {
                         Date = holidayDTO.Date,
-                        Names = nameKeys,
+                        Names = names,
                         HolidayType = holidayDTO.HolidayType,
                     };
                     holidays.Add(holiday);
@@ -42,9 +42,8 @@ namespace Civitta.TechnicalTask.PublicHolidays.Services {
 
         private async Task<IList<HolidayDTO>> GetHolidaysByMonthWebAsync(int month, int year, string country, string? region, string holidayType) {
             IList<HolidayDTO> holidays = [];
-            if (!ReqParamCheck(month, year, country, region, holidayType)) return holidays;
 
-            string requestURI = $"/enrico/json/v3.0/getHolidaysForMonthmonth={month}&year={year}&country={country}";
+            string requestURI = $"/enrico/json/v3.0/getHolidaysForMonth?month={month}&year={year}&country={country}";
             if (region != null) requestURI += $"&region={region}";
             requestURI += $"&holidayType={holidayType}";
 
@@ -54,23 +53,23 @@ namespace Civitta.TechnicalTask.PublicHolidays.Services {
             request.AddHeader("Content-Type", "application/json");
             RestResponse response = await client.ExecuteAsync(request);
 
+
             var data = JsonConvert.DeserializeObject<List<HolidayResponse>>(response.Content);
             if (data != null) {
                 foreach (HolidayResponse holiday in data) {
                     List<HolidayNameDTO> names = [];
                     DateTime date = new(
-                        holiday.Date.Year,
-                        holiday.Date.Month,
-                        holiday.Date.Day
+                        holiday.Date.year,
+                        holiday.Date.month,
+                        holiday.Date.day
                     );
 
-                    var zippedLists = holiday.Langs.Zip(holiday.Texts, (l, t) => new { Lang = l, Text = t });
-                    foreach (var lt in zippedLists) {
-                        HolidayNameDTO name = new() {
-                            Lang = lt.Lang,
-                            Text = lt.Text
+                    foreach (var name in holiday.Names) {
+                        HolidayNameDTO nameDTO = new() {
+                            Lang = name.Lang,
+                            Text = name.Text
                         };
-                        names.Add(name);
+                        names.Add(nameDTO);
                     }
 
                     HolidayDTO holidayDTO = new() {
@@ -84,8 +83,5 @@ namespace Civitta.TechnicalTask.PublicHolidays.Services {
             }
             return holidays;
         }
-
-        private bool ReqParamCheck(int month, int year, string country, string? region, string holidayType) => true;
-
     }
 }

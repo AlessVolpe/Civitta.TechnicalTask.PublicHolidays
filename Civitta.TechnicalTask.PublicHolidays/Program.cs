@@ -2,9 +2,8 @@ using Civitta.TechnicalTask.PublicHolidays.Models;
 using Civitta.TechnicalTask.PublicHolidays.Services;
 using Civitta.TechnicalTask.PublicHolidays.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using System.IO;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +16,7 @@ builder.Services.AddScoped<ICountryService, CountryService>();
 builder.Services.AddScoped<IHolidayService, Civitta.TechnicalTask.PublicHolidays.Services.NotImplementedException>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen( c => {
+builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo {
         Version = "v1",
         Title = "Civitta Technical Task: Public Holidays",
@@ -30,10 +29,9 @@ builder.Services.AddSwaggerGen( c => {
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(opt => opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Civitta Technical Task: Public Holiday v1"));
 }
 
 app.UseHttpsRedirection();

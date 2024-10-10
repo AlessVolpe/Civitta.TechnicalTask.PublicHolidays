@@ -5,7 +5,6 @@ namespace Civitta.TechnicalTask.PublicHolidays.Models {
         public virtual DbSet<Country> Countries { get; set; } = null!;
         public virtual DbSet<Holiday> Holidays { get; set; } = null!;
         public virtual DbSet<HolidayName> HolidayNames { get; set; } = null!;
-
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<Country>(entity => {
                 entity.HasKey(country => country.CountryCode);
@@ -15,7 +14,7 @@ namespace Civitta.TechnicalTask.PublicHolidays.Models {
                 .HasKey(holiday => holiday.HolidayId);
             });
             modelBuilder.Entity<HolidayName>(entity => {
-                entity.HasKey(holidayName => holidayName.NameId);
+                entity.HasKey(holidayName => new { holidayName.Lang, holidayName.Text });
             });
             OnModelCreatingPartial(modelBuilder);
         }

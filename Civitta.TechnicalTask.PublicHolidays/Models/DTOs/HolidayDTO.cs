@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Civitta.TechnicalTask.PublicHolidays.Models.DTOs {
     public class HolidayDTO {
         public DateTime Date { get; set; }
-        public DayOfWeek Weekday { get; set; }
+        public int Weekday { get; set; }
         [ForeignKey("NameId")]
         public IList<HolidayNameDTO> Names { get; set; }
         public string HolidayType { get; set; }

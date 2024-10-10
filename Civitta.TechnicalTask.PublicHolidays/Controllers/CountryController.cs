@@ -6,12 +6,13 @@ namespace Civitta.TechnicalTask.PublicHolidays.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class CountryController(ICountryService service) : ControllerBase {
         private readonly ICountryService _service = service;
 
         /// <summary>Returns the list of supported countries</summary>
         /// <returns>Returns the list of supported countries</returns>
-        [HttpGet]
+        [HttpGet("GetCountryList")]
         public IEnumerable<Country> GetCountryList() => _service.GetAllAsync().Result;
     }
 }

@@ -61,11 +61,10 @@ namespace Civitta.TechnicalTask.PublicHolidays.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("HolidayType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Names")
+                    b.Property<string>("HolidayType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -76,23 +75,32 @@ namespace Civitta.TechnicalTask.PublicHolidays.Migrations
 
             modelBuilder.Entity("Civitta.TechnicalTask.PublicHolidays.Models.HolidayName", b =>
                 {
-                    b.Property<int>("NameId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NameId"));
-
                     b.Property<string>("Lang")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("NameId");
+                    b.Property<int?>("NameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Lang", "Text");
+
+                    b.HasIndex("NameId");
 
                     b.ToTable("HolidayNames");
+                });
+
+            modelBuilder.Entity("Civitta.TechnicalTask.PublicHolidays.Models.HolidayName", b =>
+                {
+                    b.HasOne("Civitta.TechnicalTask.PublicHolidays.Models.Holiday", null)
+                        .WithMany("Names")
+                        .HasForeignKey("NameId");
+                });
+
+            modelBuilder.Entity("Civitta.TechnicalTask.PublicHolidays.Models.Holiday", b =>
+                {
+                    b.Navigation("Names");
                 });
 #pragma warning restore 612, 618
         }

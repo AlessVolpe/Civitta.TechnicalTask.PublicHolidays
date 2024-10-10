@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Civitta.TechnicalTask.PublicHolidays.Controllers {
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class HolidayController(IHolidayService service, ILogger<HolidayController> logger) : ControllerBase {
         private readonly IHolidayService _service = service;
         private readonly ILogger<HolidayController> _logger = logger;
@@ -20,7 +21,7 @@ namespace Civitta.TechnicalTask.PublicHolidays.Controllers {
         /// <param name="region">Region in the country to return holidays for. Not all countries have region defined</param>
         /// <param name="holidayType">Type of holidays to be returned. Allowed values: all, public_holiday, observance, school_holiday, other_day, entra_working_day</param>
         /// <returns>Holidays for given month in given country</returns>
-        [HttpGet("query")]
+        [HttpGet("GetHolidaysByMonth")]
         public IEnumerable<Holiday> GetHolidaysByMonth([BindRequired] int month, [BindRequired] int year, [BindRequired] string country,
             string? region = null, [AllowedValues(["all", "public_holiday", "observance", "school_holiday", "other_day", "entra_working_day"])]string holidayType = "all") =>
             _service.GetHolidaysByMonthAsync(month, year, country, region, holidayType).Result;
