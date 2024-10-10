@@ -35,5 +35,14 @@ namespace Civitta.TechnicalTask.PublicHolidays.Controllers {
         [HttpGet("IsPublicHoliday")]
         public IsPublicHolidayResponse IsPublicHoliday([BindRequired] string date, [BindRequired] string country, string? region) => 
             _service.IsPublicHolidayAsync(date, country, region).Result;
+
+        /// <summary>Returns maximum free days in given country for the given year</summary>
+        /// <param name="year">Year to return holidays for</param>
+        /// <param name="country">ISO 3166-1 alpha-3 country code or ISO 3166-1 alpha-2 country code</param>
+        /// <param name="region">Region in the country to return holidays for. Not all countries have region defined</param>
+        /// <returns>Maximum free days in given country for the given year</returns>
+        [HttpGet("GetMaximumFreeDays")]
+        public GetMaximumFreeDaysResponse GetMaximumFreeDays([BindRequired] int year, [BindRequired] string country, string? region) => 
+            _service.GetMaximumFreeDaysAsync(year, country, region).Result;
     }
 }

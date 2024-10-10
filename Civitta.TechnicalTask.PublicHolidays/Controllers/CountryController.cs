@@ -11,7 +11,7 @@ namespace Civitta.TechnicalTask.PublicHolidays.Controllers {
         private readonly ICountryService _service = service;
 
         /// <summary>Returns the list of supported countries</summary>
-        /// <returns>Returns the list of supported countries</returns>
+        /// <returns>List of supported countries</returns>
         [HttpGet("GetCountryList")]
         public IEnumerable<Country> GetCountryList() => _service.GetAllAsync().Result;
     }

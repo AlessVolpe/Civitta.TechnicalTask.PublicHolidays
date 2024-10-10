@@ -12,5 +12,7 @@ namespace Civitta.TechnicalTask.PublicHolidays.Models {
         [ForeignKey("NameId")]
         public IList<HolidayName> Names { get; set; }
         public string HolidayType { get; set; }
+        [ForeignKey("CountryCode")]
+        public string Country { get; set; }
     }
 }

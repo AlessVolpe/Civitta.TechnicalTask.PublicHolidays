@@ -29,10 +29,8 @@ builder.Services.AddSwaggerGen(c => {
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI(opt => opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Civitta Technical Task: Public Holiday v1"));
-}
+app.UseSwagger();
+app.UseSwaggerUI(opt => opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Civitta Technical Task: Public Holiday v1"));
 
 app.UseHttpsRedirection();
 
