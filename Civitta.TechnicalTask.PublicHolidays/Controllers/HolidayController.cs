@@ -1,4 +1,5 @@
 ﻿using Civitta.TechnicalTask.PublicHolidays.Models;
+using Civitta.TechnicalTask.PublicHolidays.Models.Responses;
 using Civitta.TechnicalTask.PublicHolidays.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -25,5 +26,14 @@ namespace Civitta.TechnicalTask.PublicHolidays.Controllers {
         public IEnumerable<Holiday> GetHolidaysByMonth([BindRequired] int month, [BindRequired] int year, [BindRequired] string country,
             string? region = null, [AllowedValues(["all", "public_holiday", "observance", "school_holiday", "other_day", "entra_working_day"])]string holidayType = "all") =>
             _service.GetHolidaysByMonthAsync(month, year, country, region, holidayType).Result;
+
+        /// <summary>Returns if given day is public holiday in given country</summary>
+        /// <param name="date">Date to check (format: yyyy-mm-dd)</param>
+        /// <param name="country">ISO 3166-1 alpha-3 country code or ISO 3166-1 alpha-2 country code</param>
+        /// <param name="region">Region in the country to return holidays for. Not all countries have region defined</param>
+        /// <returns>Flag if given day is public holiday in given country</returns>
+        [HttpGet("IsPublicHoliday")]
+        public IsPublicHolidayResponse IsPublicHoliday([BindRequired] string date, [BindRequired] string country, string? region) => 
+            _service.IsPublicHolidayAsync(date, country, region).Result;
     }
 }

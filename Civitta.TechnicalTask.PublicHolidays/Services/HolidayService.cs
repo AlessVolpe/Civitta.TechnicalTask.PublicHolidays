@@ -40,6 +40,29 @@ namespace Civitta.TechnicalTask.PublicHolidays.Services {
             return await _context.Holidays.ToListAsync();
         }
 
+        public async Task<IsPublicHolidayResponse> IsPublicHolidayAsync(string date, string country, string? region) {
+            if (!context.Holidays.Any()) return await IsPublicHolidayWebAsync(date, country, region);
+
+            var holidays = await GetHolidaysByMonthAsync(Int32.Parse(date.Split("-")[1]), Int32.Parse(date.Split("-")[0]), country, region, "all");
+            if (holidays.Where(h => h.Date == DateTime.Parse(date)).Any()) return new IsPublicHolidayResponse { IsPublicHoliday = true };
+            return new IsPublicHolidayResponse { IsPublicHoliday = false };
+        }
+
+        private async Task<IsPublicHolidayResponse> IsPublicHolidayWebAsync(string date, string country, string region) {
+            string requestURI = $"/enrico/json/v3.0/isPublicHoliday?date={date}&country={country}";
+            if (region != null) requestURI += $"&region={region}";
+
+            var client = new RestClient(_urlBase);
+            var request = new RestRequest(requestURI, Method.Get);
+            request.AddHeader("Access-Control-Allow-Origin", "*");
+            request.AddHeader("Content-Type", "application/json");
+            RestResponse response = await client.ExecuteAsync(request);
+
+            var data = JsonConvert.DeserializeObject<IsPublicHolidayResponse>(response.Content);
+            IsPublicHolidayResponse isPublicHolidayResponse = new() { IsPublicHoliday = data.IsPublicHoliday };
+            return isPublicHolidayResponse;
+        }
+
         private async Task<IList<HolidayDTO>> GetHolidaysByMonthWebAsync(int month, int year, string country, string? region, string holidayType) {
             IList<HolidayDTO> holidays = [];
 
@@ -85,3 +108,5 @@ namespace Civitta.TechnicalTask.PublicHolidays.Services {
         }
     }
 }
+
+
